@@ -1,0 +1,71 @@
+name: Manual Python Input Example
+
+on:
+    workflow_dispatch:
+        inputs:
+            name:
+                description: "Enter your name"
+                required: true
+                default: "World"
+                type: string
+            run_tests:
+                description: "Run tests?"
+                required: true
+                default: true
+                type: boolean
+            
+            repeat_count:
+                description: "Number of times to repeat the greeting"
+                required: true
+                default: 3
+                type: number
+            log_level:
+                description: "Select log level"
+                required: true
+                default: "info"
+                type: choice
+                options:
+                    - debug
+                    - info
+                    - warning
+                    - error
+            target_environment:
+                description: "choose Github environment"
+                required: true
+                default: "production"
+                type: environment
+jobs:
+    run-python:
+        runs-on: ubuntu-latest
+        environment: ${{ github.event.inputs.target_environment }}
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.12'
+
+            - name: Show Github Action Inputs
+              run: |
+                echo "Name : ${{ github.event.inputs.name }}"
+                echo "Run tests : ${{ github.event.inputs.run_tests }}"
+                echo "Repeat count : ${{ github.event.inputs.repeat_count }}"
+                echo "Log level : ${{ github.event.inputs.log_level }}"
+                echo "Target environment : ${{ github.event.inputs.target_environment }}"
+            - name: Run Python Script
+              if: ${{ github.event.inputs.run_tests }}
+              run: |
+                python  -m compileall .
+                echo "Running tests..."
+                # Here you can add commands to run your tests, e.g., pytest or unittest
+
+            - name: Run python script with inputs
+              env:
+                NAME: ${{ github.event.inputs.name}}
+                RUN_TESTS: ${{ github.event.inputs.run_tests}}
+                REPEAT_COUNT: ${{ github.event.inputs.repeat_count}}
+                LOG_LEVEL: ${{ github.event.inputs.log_level}}
+                TARGET_ENVIRONMENT: ${{ github.event.inputs.target_environment}}
+              run: python app2.py

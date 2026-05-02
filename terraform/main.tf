@@ -12,6 +12,6 @@ terraform {
 provider "local" {}
 
 resource "local_file" "example" {
-    filename = "${path.module}/hello.txt"
-    content = "Hello from terraform and Github actions!"
+    filename = "${path.module}/hello-${var.environment}.txt"
+    content = "Hello from terraform and Github actions ${var.environment}!"
 }

@@ -35,10 +35,10 @@ jobs:
               working-directory: ./terraform
 
             - name: Terraform Plan
-              run: terraform plan -out=tfplan
+              run: terraform plan -var="environment=${{ github.event.inputs.environment }}" -out=tfplan
               working-directory: ./terraform
 
             - name: Terraform Apply
               if: github.event_name == 'workflow_dispatch'
-              run: terraform apply -auto-approve -var="environment=${{ github.event.inputs.environment }}" tfplan
+              run: terraform apply -auto-approve  tfplan
               working-directory: ./terraform

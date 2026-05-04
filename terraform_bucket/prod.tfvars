@@ -1,0 +1,5 @@
+project_id="project-9eaccd78-90e1-45fd-8fc"
+bucket_name="paran12345"
+environment="production"
+region="us-central1"
+location="US"
